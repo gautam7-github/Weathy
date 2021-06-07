@@ -12,7 +12,7 @@ Weathy - The Weather App
 #### Made Using
 
 -   Flutter 2.2
--   location for location data
+-   location package for location data
 -   OpenWeatherMap API for weather data
 -   GetX for state management
 -   http for requests
