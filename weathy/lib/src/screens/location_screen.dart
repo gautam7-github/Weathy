@@ -18,6 +18,7 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   var weatherService = WeatherModel();
+  int count = 0;
   dynamic temperature;
   dynamic feelsLike;
   dynamic max;
@@ -38,21 +39,24 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Future<void> updateUI() async {
     var weatherData = widget.weatherData;
-    print(weatherData);
     if (weatherData == null) {
-      setState(
-        () {
-          temperature = 0;
-          max = min = 0.0;
-          feelsLike = 0;
-          weatherIcon = '🤷'.toString();
-          weatherMessage = 'Unable to get weather data';
-          cityName = 'Hell(Maybe)';
-          grad = kSunnyGrd;
-          degree = 0;
-          sunriseTime = sunsetTime = "";
-        },
-      );
+      await weatherService.getCurrentLocation();
+      weatherData = await weatherService.getLocationWeather();
+      if (weatherData == null) {
+        setState(
+          () {
+            temperature = 0;
+            max = min = 0.0;
+            feelsLike = 0;
+            weatherIcon = '🤷'.toString();
+            weatherMessage = 'Unable to get weather data';
+            cityName = 'Hell(Maybe)';
+            grad = kSunnyGrd;
+            degree = 0;
+            sunriseTime = sunsetTime = "";
+          },
+        );
+      }
     } else {
       setState(
         () {
@@ -89,6 +93,12 @@ class _LocationScreenState extends State<LocationScreen> {
                   .toLocal()
                   .minute
                   .toString();
+          var CurrentTime = DateTime.now().toLocal().isAfter(
+              DateTime.fromMillisecondsSinceEpoch(sunset * 1000, isUtc: true)
+                  .toLocal());
+          if (CurrentTime == true) {
+            grad = kNightGrd;
+          }
         },
       );
     }

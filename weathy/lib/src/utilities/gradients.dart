@@ -50,3 +50,14 @@ const kHRainyGrd = LinearGradient(
     Color(0xFF1CB5E0), //#
   ],
 );
+
+const kNightGrd = LinearGradient(
+  stops: [
+    0.4,
+    1.0,
+  ],
+  colors: [
+    Color(0xFF141E30),
+    Color(0xFF243B55),
+  ],
+);

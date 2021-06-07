@@ -1,22 +1,41 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class LocationService {
-  late double latitude = 38.8977;
-  late double longitude = 77.0365;
+  double? latitude;
+  double? longitude;
   Future<void> getUserLocation() async {
     try {
-      await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high,
-              forceAndroidLocationManager: true)
-          .then(
-        (Position position) {
-          latitude = position.latitude;
-          longitude = position.longitude;
-        },
-      );
+      Location location = new Location();
+
+      bool _serviceEnabled;
+      PermissionStatus _permissionGranted;
+      LocationData _locationData;
+
+      _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return;
+        }
+      }
+
+      _permissionGranted = await location.hasPermission();
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return;
+        }
+      }
+
+      _locationData = await location.getLocation();
+      latitude = _locationData.latitude;
+      longitude = _locationData.longitude;
+      print("$latitude $longitude");
     } catch (e) {
-      latitude = 38.8977;
-      longitude = 77.0365;
+      print("$latitude $longitude");
+      print(e);
+      latitude = 0.0;
+      longitude = 0.0;
     }
   }
 }
