@@ -25,11 +25,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
     await weatherService.getCurrentLocation();
     try {
       var weatherData = await weatherService.getLocationWeather();
+      var airData = await weatherService.getAirLevels();
       if (weatherData == null) {
         throw HttpException("Internet Problems");
       }
       Get.off(
-        () => LocationScreen(weatherData: weatherData),
+        () => LocationScreen(
+          weatherData: weatherData,
+          airData: airData,
+        ),
         transition: Transition.rightToLeft,
       );
     } catch (e) {

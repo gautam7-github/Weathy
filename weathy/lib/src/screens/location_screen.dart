@@ -11,14 +11,14 @@ import 'package:weathy/src/utilities/gradients.dart';
 
 class LocationScreen extends StatefulWidget {
   final weatherData;
+  final airData;
   @override
   _LocationScreenState createState() => _LocationScreenState();
-  LocationScreen({this.weatherData});
+  LocationScreen({this.weatherData, this.airData});
 }
 
 class _LocationScreenState extends State<LocationScreen> {
   var weatherService = WeatherModel();
-  int count = 0;
   dynamic temperature;
   dynamic feelsLike;
   dynamic max;
@@ -30,6 +30,7 @@ class _LocationScreenState extends State<LocationScreen> {
   String? weatherMessage;
   String? sunriseTime;
   String? sunsetTime;
+  String? aQlevel;
   LinearGradient? grad;
   @override
   void initState() {
@@ -40,7 +41,6 @@ class _LocationScreenState extends State<LocationScreen> {
   Future<void> updateUI() async {
     var weatherData = widget.weatherData;
     if (weatherData == null) {
-      await weatherService.getCurrentLocation();
       weatherData = await weatherService.getLocationWeather();
       if (weatherData == null) {
         setState(
@@ -72,6 +72,7 @@ class _LocationScreenState extends State<LocationScreen> {
           this.weatherMessage = weatherService.getMessage(temperature);
           this.cityName = weatherData['name'];
           var sunrise = weatherData['sys']['sunrise'];
+          this.aQlevel = widget.airData['list'][0]['main']['aqi'].toString();
           sunriseTime = DateTime.fromMillisecondsSinceEpoch(sunrise * 1000,
                       isUtc: true)
                   .toLocal()
@@ -93,10 +94,10 @@ class _LocationScreenState extends State<LocationScreen> {
                   .toLocal()
                   .minute
                   .toString();
-          var CurrentTime = DateTime.now().toLocal().isAfter(
+          var currentTime = DateTime.now().toLocal().isAfter(
               DateTime.fromMillisecondsSinceEpoch(sunset * 1000, isUtc: true)
                   .toLocal());
-          if (CurrentTime == true) {
+          if (currentTime == true) {
             grad = kNightGrd;
           }
         },
@@ -119,9 +120,11 @@ class _LocationScreenState extends State<LocationScreen> {
             strokeWidth: 3,
             color: Colors.white,
             onRefresh: () async {
-              setState(() {
-                updateUI();
-              });
+              setState(
+                () {
+                  updateUI();
+                },
+              );
             },
             child: Container(
               child: ListView(
@@ -165,6 +168,23 @@ class _LocationScreenState extends State<LocationScreen> {
                   SunTimes(
                     sunRise: sunriseTime,
                     sunSet: sunsetTime,
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Air Quality Index',
+                          style: kSummaryTextStyle,
+                        ),
+                        Text(
+                          '$aQlevel',
+                          style: kTempTextStyle,
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 100,

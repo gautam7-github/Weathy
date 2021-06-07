@@ -5,8 +5,7 @@ import 'package:weathy/src/utilities/gradients.dart';
 
 const API_KEY = "f84af5fcddbe72e88e80691320297b6b";
 const baseURL = 'https://api.openweathermap.org/data/2.5/weather';
-const polBaseURL =
-    "http://api.openweathermap.org/data/2.5/air_pollution";
+const polBaseURL = "http://api.openweathermap.org/data/2.5/air_pollution";
 
 class WeatherModel {
   late LinearGradient backColor;
@@ -77,6 +76,16 @@ class WeatherModel {
           "?lat=${locationController.latitude}&lon=${locationController.longitude}&appid=$API_KEY&units=metric",
     );
     var data = await networkController.getData();
+    return data;
+  }
+
+  Future<dynamic> getAirLevels() async {
+    NetworkService netwrk = NetworkService(
+      url:
+          "$polBaseURL?lat=${locationController.latitude}&lon=${locationController.longitude}&appid=$API_KEY",
+    );
+    var data = await netwrk.getData();
+    print(data);
     return data;
   }
   // http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={API key}

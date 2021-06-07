@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:location/location.dart';
 
 class LocationService {
@@ -11,19 +13,20 @@ class LocationService {
       PermissionStatus _permissionGranted;
       LocationData _locationData;
 
+      //await location.changeSettings(accuracy: LocationAccuracy.high);
       _serviceEnabled = await location.serviceEnabled();
       if (!_serviceEnabled) {
         _serviceEnabled = await location.requestService();
         if (!_serviceEnabled) {
-          return;
+          throw "PermissionException";
         }
       }
-
+      await location.requestPermission();
       _permissionGranted = await location.hasPermission();
       if (_permissionGranted == PermissionStatus.denied) {
         _permissionGranted = await location.requestPermission();
         if (_permissionGranted != PermissionStatus.granted) {
-          return;
+          throw "PermissionException";
         }
       }
 
@@ -32,10 +35,15 @@ class LocationService {
       longitude = _locationData.longitude;
       print("$latitude $longitude");
     } catch (e) {
+      Get.dialog(
+        Container(
+          child: Text("Location Problems"),
+        ),
+      );
       print("$latitude $longitude");
       print(e);
-      latitude = 0.0;
-      longitude = 0.0;
+      latitude = 33.0;
+      longitude = 74.0;
     }
   }
 }
