@@ -113,65 +113,68 @@ class _LocationScreenState extends State<LocationScreen> {
                 updateUI();
               });
             },
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    TopBar(
-                      cityName: cityName,
-                      onP: () {
-                        setState(() {
-                          updateUI();
-                        });
-                      },
+            child: Container(
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                children: <Widget>[
+                  TopBar(
+                    cityName: cityName,
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  TempInfo(
+                    weatherIcon: weatherIcon,
+                    weatherSummary: weatherSummary,
+                    temp: this.temperature.round(),
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  FeelsLike(
+                    feelsLike: this.feelsLike.round(),
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  MinMaxData(
+                    max: max,
+                    min: min,
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  WindBar(
+                    degree: degree,
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  SunTimes(
+                    sunRise: sunriseTime,
+                    sunSet: sunsetTime,
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Center(
+                    child: Text(
+                      '$weatherMessage',
+                      style: kSummaryTextStyle,
                     ),
-                    SizedBox(
-                      height: 100,
-                    ),
-                    TempInfo(
-                      weatherIcon: weatherIcon,
-                      weatherSummary: weatherSummary,
-                      temp: this.temperature.round(),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    ),
-                    FeelsLike(
-                      feelsLike: this.feelsLike.round(),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    ),
-                    MinMaxData(
-                      max: max,
-                      min: min,
-                    ),
-                    WindBar(
-                      degree: degree,
-                    ),
-                    SizedBox(
-                      height: 100,
-                    ),
-                    Center(
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Center(
                       child: Text(
-                        '$weatherMessage',
-                        style: kSummaryTextStyle,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    ),
-                    SunTimes(
-                      sunRise: sunriseTime,
-                      sunSet: sunsetTime,
-                    ),
-                  ],
-                ),
-              ],
+                    "ProdiGinix Soft™",
+                    style: TextStyle(fontFamily: "Spartan MB"),
+                  )),
+                ],
+              ),
             ),
           ),
         ),

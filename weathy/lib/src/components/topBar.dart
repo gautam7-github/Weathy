@@ -3,8 +3,7 @@ import 'package:weathy/src/utilities/constants.dart';
 
 class TopBar extends StatelessWidget {
   final String? cityName;
-  final Function onP;
-  TopBar({required this.cityName, required this.onP});
+  TopBar({required this.cityName});
   @override
   Widget build(BuildContext context) {
     return Container(
