@@ -35,6 +35,9 @@ class WeatherModel {
   }
 
   String getMessage(dynamic temp) {
+    if (temp > 45) {
+      return "BBQed by Nature";
+    }
     if (temp > 35) {
       return 'It\'s 🍦 time';
     } else if (temp > 25) {
@@ -87,6 +90,20 @@ class WeatherModel {
     var data = await netwrk.getData();
     print(data);
     return data;
+  }
+
+  String? getAQILevel(int aqiLevel) {
+    if (aqiLevel > 0 && aqiLevel <= 50) {
+      return "Good";
+    } else if (aqiLevel > 50 && aqiLevel <= 100) {
+      return "Moderate";
+    } else if (aqiLevel > 100 && aqiLevel <= 200) {
+      return "Unhealthy";
+    } else if (aqiLevel > 200 && aqiLevel <= 300) {
+      return "Very Unhealthy";
+    } else {
+      return "Hazardous";
+    }
   }
   // http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={API key}
 }

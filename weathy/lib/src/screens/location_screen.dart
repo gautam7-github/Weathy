@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weathy/src/components/airLevels.dart';
 import 'package:weathy/src/components/min_max.dart';
 import 'package:weathy/src/components/sunTimes.dart';
 import 'package:weathy/src/components/topBar.dart';
@@ -31,6 +32,9 @@ class _LocationScreenState extends State<LocationScreen> {
   String? sunriseTime;
   String? sunsetTime;
   String? aQlevel;
+  String? aqiMsg;
+  double? pm25;
+  double? pm10;
   LinearGradient? grad;
   @override
   void initState() {
@@ -54,6 +58,8 @@ class _LocationScreenState extends State<LocationScreen> {
             grad = kSunnyGrd;
             degree = 0;
             sunriseTime = sunsetTime = "";
+            aQlevel = '0';
+            aqiMsg = 'Something';
           },
         );
       }
@@ -73,6 +79,11 @@ class _LocationScreenState extends State<LocationScreen> {
           this.cityName = weatherData['name'];
           var sunrise = weatherData['sys']['sunrise'];
           this.aQlevel = widget.airData['list'][0]['main']['aqi'].toString();
+          this.aqiMsg = weatherService
+              .getAQILevel(widget.airData['list'][0]['main']['aqi']);
+          this.pm25 = widget.airData['list'][0]['components']['pm2_5'];
+          this.pm10 = widget.airData['list'][0]['components']['pm10'];
+          // time conversions
           sunriseTime = DateTime.fromMillisecondsSinceEpoch(sunrise * 1000,
                       isUtc: true)
                   .toLocal()
@@ -97,6 +108,7 @@ class _LocationScreenState extends State<LocationScreen> {
           var currentTime = DateTime.now().toLocal().isAfter(
               DateTime.fromMillisecondsSinceEpoch(sunset * 1000, isUtc: true)
                   .toLocal());
+          // change gradient if night time
           if (currentTime == true) {
             grad = kNightGrd;
           }
@@ -172,19 +184,11 @@ class _LocationScreenState extends State<LocationScreen> {
                   SizedBox(
                     height: 100,
                   ),
-                  Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Air Quality Index',
-                          style: kSummaryTextStyle,
-                        ),
-                        Text(
-                          '$aQlevel',
-                          style: kTempTextStyle,
-                        ),
-                      ],
-                    ),
+                  AirLevel(
+                    aQLevel: aQlevel.toString(),
+                    aqiMsg: aqiMsg.toString(),
+                    pm25: pm25,
+                    pm10: pm10,
                   ),
                   SizedBox(
                     height: 100,

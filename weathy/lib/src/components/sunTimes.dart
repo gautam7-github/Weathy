@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_indicator/page_indicator.dart';
 import 'package:weathy/src/utilities/constants.dart';
 
 class SunTimes extends StatelessWidget {
@@ -12,16 +13,18 @@ class SunTimes extends StatelessWidget {
         height: 300.0,
         width: double.infinity,
         child: Center(
-          child: PageView(
-            scrollDirection: Axis.horizontal,
-            physics: BouncingScrollPhysics(),
-            children: [
-              Card(
-                color: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Column(
+          child: PageIndicatorContainer(
+            length: 2,
+            padding: EdgeInsets.only(bottom: 0, top: 16),
+            align: IndicatorAlign.bottom,
+            indicatorColor: Colors.white,
+            indicatorSelectorColor: Colors.deepPurple,
+            shape: IndicatorShape.circle(size: 12),
+            child: PageView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              children: [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -38,13 +41,7 @@ class SunTimes extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              Card(
-                color: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -61,8 +58,8 @@ class SunTimes extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
